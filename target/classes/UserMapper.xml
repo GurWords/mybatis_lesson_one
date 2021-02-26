@@ -1,0 +1,23 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.dao.inf.UserMapper" >
+    <resultMap id="detailUsers" type="Users">
+        <id column="user_id" property="id"/>
+        <result property="name" column="user_name"/>
+        <collection property="courseList" ofType="Course">
+            <id property="id" column="course_id"/>
+            <result property="title" column="title_course"/>
+        </collection>
+    </resultMap>
+   <select id="getUser" parameterType="java.lang.Integer" resultMap="detailUsers">
+       select one.id as user_id, one.name as user_name, two.id as course_id, two.title as title_course from users one left outer join course two
+       on (select id_course from users_cource where one.id = id_users and two.id = id_course) is not null where one.id = #{id}
+   </select>
+    <select id="getListUser">
+    </select>
+    <insert id="insertUsers" parameterType="java.lang.String">
+        insert into users('name') values(#{name})
+    </insert>
+    <insert id="insertCourse" parameterType="java.lang.String">
+        insert into course (title) values ('JM')
+    </insert>
+</mapper>
